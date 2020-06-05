@@ -1,25 +1,62 @@
-import React from 'react'
-import logo from './logo.svg'
+import React, {useEffect, useState} from 'react'
 import './App.css'
-import {foo} from 'shared/src'
+import PlacesList from './components/Places/PlacesList';
+import PlacesSearch from './components/Places/PlacesSearch';
+import {Place} from 'shared/src/api/interfaces/places';
+import {fetchPlaces} from './api';
+import {notification, Typography} from 'antd';
+
+const {Title} = Typography;
+
 function App() {
-    foo()
+
+    const [places, setPlaces] = useState<Place[]>([])
+    const [searchValue, setSearchValue] = useState('')
+    const [fetchingData, setFetchingData] = useState(false)
+
+    const openErrorNotification = (errorMsg: string) => {
+        notification.error({
+            message: 'Error',
+            description: errorMsg,
+            duration: 2,
+            onClick: () => {
+            },
+        });
+    };
+    const openNotification = (msg: string) => {
+        notification.open({
+            message: 'Notification',
+            description: msg,
+            duration: 1,
+            onClick: () => {
+            },
+        });
+    };
+
+    useEffect(() => {
+        setFetchingData(true)
+        fetchPlaces(searchValue).then(places => {
+            if (searchValue.length && !places.length) {
+                openNotification('No Results')
+            }
+            setPlaces(places)
+        }).catch(e => {
+            openErrorNotification(e?.response?.data)
+        }).finally(() => {
+            setFetchingData(false)
+        })
+    }, [searchValue])
+
     return (
         <div className="App">
             <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.tsx</code> and save to reload.
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
+                <Title>Facebook Places search</Title>
             </header>
+            <body className="App-body">
+            <PlacesSearch setValue={setSearchValue} isLoading={fetchingData}/>
+            <PlacesList list={places}/>
+            </body>
+
         </div>
     )
 }
