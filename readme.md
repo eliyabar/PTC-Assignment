@@ -2,7 +2,7 @@
 This is my interpretation of the facebook pages search
 ## Note
 What makes this project scalable?
-1. Using monorepo strategy - makes it easy to communicate between the backend and the client, having a shared repository to share some interfaces between both projects and reduce errors and duplications.
+1. Using monorepo strategy - makes it easy to communicate between the backend and the client, having a shared repository to share some interfaces between both projects and reduce errors and duplications, build install and test both projects in one endpoint.
 2. Using Typescript in both projects - makes everything Strongly typed, less prone to error and easier to work in large teams.
 3. Using Prettier - Unify code styling makes everything more readable and consistent.
 4. Make everything configurable - using a config.ts file to set configurations across all the backend.  
@@ -37,13 +37,14 @@ I've decided to go with the monorepo strategy for easier handling of both client
 ## Installation
 First you need to make sure your .env file contains both TOKENS for FB and Open Cage.  
 go to packages\backend\.env and insert the correct access tokens to this file.  
-``OCD_API_KEY=ADD YOUR KEY  
-  FB_ACCESS_TOKEN=ADD YOUR KEY  ``
+OCD_API_KEY=ADD YOUR KEY  
+FB_ACCESS_TOKEN=ADD YOUR KEY
 
 Second you need to go into the root folder of this repo and install the dependencies of both client and backend.  
 use:  
 ``yarn install``  
 This will cover the dependencies of both projects at once.
+Important note - you must [install yarn](https://classic.yarnpkg.com/en/docs/install), this will not work with other package managers like npm.
 
 ## Tests
 use:  
